@@ -2,7 +2,7 @@ const { ethers } = require('hardhat');
 const { expect } = require('chai');
 
 describe('Damn ERC', function () {
-    let deployer, attacker;
+    let deployer, attacker, marketing, anotherGuy;
 
     // Initial setup
     const INITIAL_SUPPLY = 1000000n * 10n ** 18n;
@@ -12,7 +12,7 @@ describe('Damn ERC', function () {
 
     before(async function () {
         /** SETUP SCENARIO - NO NEED TO CHANGE ANYTHING HERE */  
-        [deployer, attacker,marketing,anotherGuy] = await ethers.getSigners(); //signers
+        [deployer, attacker, marketing, anotherGuy] = await ethers.getSigners(); //signers
     
         // Deploy Damn ERC token 
         this.token = await (await ethers.getContractFactory('DamnERC', deployer)).deploy(INITIAL_SUPPLY, anitwhaleMax, marketing.address);
