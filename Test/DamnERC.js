@@ -52,3 +52,16 @@ describe('Damn ERC', function () {
         
     });
 
+
+    it('Antiwhale test', async function () {
+
+        // Deployer transfers all tokens to attacker
+        await this.token.connect(deployer).transfer(attacker.address,this.token.balanceOf(deployer.address))
+
+        // Attacker cannot transfer all tokens to another guy because of antiwhale
+        await expect(
+            this.token.connect(attacker).transfer(anotherGuy.address,this.token.balanceOf(attacker.address))
+            ).to.be.revertedWith("antiWhale: Transfer amount exceeds the maxTransferAmount");   
+    });
+    
+});
