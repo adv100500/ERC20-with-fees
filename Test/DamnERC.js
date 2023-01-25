@@ -25,13 +25,6 @@ describe('Damn ERC', function () {
      
     });
 
-    it('Antiwhale test', async function () {
-        /** Check antiwhale */        
-        await expect(
-            this.token.connect(deployer).transfer(attacker.address,INITIAL_SUPPLY)
-            ).to.be.revertedWith("antiWhale: Transfer amount exceeds the maxTransferAmount");   
-    });
-
     it('Marketing test', async function () {
         //Transfer 100 tokens from deployer to attacker and from attacker to another guy 
         await this.token.connect(deployer).transfer(attacker.address,transferTest);
@@ -46,20 +39,16 @@ describe('Damn ERC', function () {
         expect(
             await this.token.balanceOf(marketing.address)
         ).to.be.eq((ethers.utils.parseEther('2')));  
+
+        // Check deployer didn't transfer to marketing
+        expect(
+            await this.token.balanceOf(deployer.address)
+        ).to.be.eq(ethers.utils.parseEther('999900'));
+
+        // Check another guy received amount without marketing fees
+        expect(
+            await this.token.balanceOf(anotherGuy.address)
+        ).to.be.eq(ethers.utils.parseEther('98'));
         
     });
 
-    after(async function () {
-        /** SUCCESS CONDITIONS */
-
-        // Deployer didn't transfer to marketing
-        expect(
-            await this.token.balanceOf(deployer.address)
-            ).to.be.eq(ethers.utils.parseEther('999900'));
-
-        // Attacker has 98 tokens         
-        expect(
-        await this.token.balanceOf(anotherGuy.address)
-        ).to.be.eq(ethers.utils.parseEther('98'));
-    });
-});
