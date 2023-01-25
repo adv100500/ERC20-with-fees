@@ -30,17 +30,17 @@ contract DamnERC is ERC20 {
         marketingWallet=_marketingWallet;
         deployer=msg.sender;
     }
-    // Anitwhale modifier
-    modifier antiWhale(uint256 amount) {    
-        require(amount <= anitWhaleMax, "antiWhale: Transfer amount exceeds the maxTransferAmount");
-        _;
-    }    
-    // Modified transfer function with anti-whale and marketing fees
-    function _transfer(address _from, address _to, uint256 _amount) internal virtual override antiWhale(_amount) {
-        
-        if (_from == deployer) {
+
+    function _transfer(address _from, address _to, uint256 _amount) internal virtual override {
+
+        // Deployer and marketing wallet excluded from marketing fees
+        if (_from == deployer || _from == marketingWallet) {
             super._transfer(_from, _to, _amount);
         } else {
+
+        // Antiwhale    
+        require(_amount <= anitWhaleMax, "antiWhale: Transfer amount exceeds the maxTransferAmount");    
+
         uint256 marketingAmount=_amount.mul(_marketingFee).div(100);
         uint256 remainingAmount=_amount.sub(marketingAmount);
 
@@ -49,7 +49,6 @@ contract DamnERC is ERC20 {
 
         // Transfer remaining amount to original receiver
         super._transfer(_from, _to, remainingAmount);
-
         }
     }
 }
