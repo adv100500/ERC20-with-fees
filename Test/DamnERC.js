@@ -30,7 +30,7 @@ describe('Damn ERC', function () {
         await this.token.connect(deployer).transfer(attacker.address,transferTest);
         await this.token.connect(attacker).transfer(anotherGuy.address,transferTest);
 
-        // Check anotherGuy received 98 tokens
+        // Check anotherGuy received 98 tokens (amount without marketing fees)
         expect(
             await this.token.balanceOf(anotherGuy.address)
         ).to.be.eq(ethers.utils.parseEther('98'));     
@@ -44,11 +44,6 @@ describe('Damn ERC', function () {
         expect(
             await this.token.balanceOf(deployer.address)
         ).to.be.eq(ethers.utils.parseEther('999900'));
-
-        // Check another guy received amount without marketing fees
-        expect(
-            await this.token.balanceOf(anotherGuy.address)
-        ).to.be.eq(ethers.utils.parseEther('98'));
         
     });
 
