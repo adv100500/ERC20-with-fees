@@ -4,11 +4,12 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 /**
  * @title DamnERC
  */
-contract DamnERC is ERC20 {
+contract DamnERC is ERC20, Ownable {
     using SafeMath for uint256;
 
     // Maximum amount of tokens
@@ -29,6 +30,14 @@ contract DamnERC is ERC20 {
         anitWhaleMax=_anitWhaleMax;
         marketingWallet=_marketingWallet;
         deployer=msg.sender;
+    }
+
+    function changeMarketingAddress(address _newAddress) public onlyOwner {
+        marketingWallet=_newAddress;
+    }
+
+    function changeMarketingFees(uint256 _newFees) public onlyOwner {
+        _marketingFee=_newFees;
     }
 
     function _transfer(address _from, address _to, uint256 _amount) internal virtual override {
