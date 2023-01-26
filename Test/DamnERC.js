@@ -52,16 +52,41 @@ describe('Damn ERC', function () {
 
         // Deployer transfers all tokens to attacker
         await this.token.connect(deployer).transfer(attacker.address,this.token.balanceOf(deployer.address))
-        
+
         // Check attacker balance 
         expect(
             await this.token.balanceOf(attacker.address)
-        ).to.be.eq(ethers.utils.parseEther('999900'));        
+        ).to.be.eq(ethers.utils.parseEther('999900'));
 
         // Attacker cannot transfer all tokens to another guy because of antiwhale
         await expect(
             this.token.connect(attacker).transfer(anotherGuy.address,this.token.balanceOf(attacker.address))
             ).to.be.revertedWith("antiWhale: Transfer amount exceeds the maxTransferAmount");   
     });
+
+    it('Change fees and wallet test', async function () {
+
+        // Attacker tries to change marketing address
+        await expect(
+            this.token.connect(attacker).changeMarketingAddress(attacker.address)
+            ).to.be.revertedWith("Ownable: caller is not the owner");   
+
+        // Attacker tries to change marketing fees    
+        await expect(
+            this.token.connect(attacker).changeMarketingFees(10)
+            ).to.be.revertedWith("Ownable: caller is not the owner");   
+            
+        // Deployer changes marketing address to deployer
+        await this.token.connect(deployer).changeMarketingAddress(deployer.address);   
+        expect(
+            await this.token.marketingWallet()
+        ).to.be.eq(deployer.address);          
+
+        // Deployer changes marketing fees to 10%
+        await this.token.connect(deployer).changeMarketingFees(10);   
+        expect(
+            await this.token._marketingFee()
+        ).to.be.eq('10');                  
+    });    
     
 });
