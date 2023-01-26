@@ -52,6 +52,11 @@ describe('Damn ERC', function () {
 
         // Deployer transfers all tokens to attacker
         await this.token.connect(deployer).transfer(attacker.address,this.token.balanceOf(deployer.address))
+        
+        // Check attacker balance 
+        expect(
+            await this.token.balanceOf(attacker.address)
+        ).to.be.eq(ethers.utils.parseEther('999900'));        
 
         // Attacker cannot transfer all tokens to another guy because of antiwhale
         await expect(
