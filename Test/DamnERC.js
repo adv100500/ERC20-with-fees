@@ -30,7 +30,7 @@ describe('Damn ERC', function () {
         await this.token.connect(deployer).transfer(attacker.address,transferTest);
         await this.token.connect(attacker).transfer(anotherGuy.address,transferTest);
 
-        // Check attacker received 98 tokens
+        // Check anotherGuy received 98 tokens
         expect(
             await this.token.balanceOf(anotherGuy.address)
         ).to.be.eq(ethers.utils.parseEther('98'));     
