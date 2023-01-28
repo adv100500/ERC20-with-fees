@@ -26,7 +26,7 @@ https://github.com/adv100500/ERC20-with-fees/blob/375494db1e0ef02909774baf7fbd1a
 For all other addresses, anti-whale cap will be applied:
 https://github.com/adv100500/ERC20-with-fees/blob/375494db1e0ef02909774baf7fbd1ac240068a6b/Contracts/DamnERC.sol#L91-L95
 
-Results of testing:
+
 ![image](https://user-images.githubusercontent.com/121932525/215260172-8ee8e2da-c3ca-433e-afb1-be64d72258d3.png)
 
 
