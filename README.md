@@ -7,7 +7,7 @@ https://github.com/adv100500/ERC20-with-fees/blob/375494db1e0ef02909774baf7fbd1a
 - initialSupply = total supply of tokens
 - _anitWhaleMax = maximum amount of tokens for one transfer and for the balance of any address except excluded from anti-whale cap
 - _marketingWallet = address of wallet with fees
-Deployer, _marketingWallet and contract addresses are excluded from anti-whale cap
+- Deployer, _marketingWallet and token addresses are excluded from anti-whale cap
 
 **Function to change wallet address with fees**
 https://github.com/adv100500/ERC20-with-fees/blob/375494db1e0ef02909774baf7fbd1ac240068a6b/Contracts/DamnERC.sol#L45-L49
