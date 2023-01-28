@@ -1,5 +1,6 @@
 const { ethers } = require('hardhat');
 const { expect } = require('chai');
+const { deploy } = require('@openzeppelin/hardhat-upgrades/dist/utils');
 
 describe('Damn ERC', function () {
     let deployer, attacker, marketing, anotherGuy;
@@ -48,7 +49,7 @@ describe('Damn ERC', function () {
     });
 
 
-    it('Antiwhale test', async function () {
+    it('Simple Antiwhale test', async function () {
 
         // Deployer transfers all tokens to attacker
         await this.token.connect(deployer).transfer(attacker.address,this.token.balanceOf(deployer.address))
@@ -64,6 +65,21 @@ describe('Damn ERC', function () {
             ).to.be.revertedWith("antiWhale: Transfer amount exceeds the maxTransferAmount");   
     });
 
+    it('Global Antiwhale test', async function () {
+
+        // Global antiwhale max is set on
+        await this.token.connect(deployer).setGlobalAntiWhale(true);
+
+        // Attacker transfers antiwhale max amount to attacker, remember 200 tokens went to marketing wallet
+        await this.token.connect(attacker).transfer(anotherGuy.address,anitwhaleMax);
+
+        // Attacker cannot transfer 105 additional token as it breaches antiwhale max of the balance of another guy
+        await expect(
+            this.token.connect(attacker).transfer(anotherGuy.address,ethers.utils.parseEther('105'))
+            ).to.be.revertedWith("antiWhale: Transfer amount exceeds the maxTransferAmount");   
+   
+        });
+        
     it('Change fees and wallet test', async function () {
 
         // Attacker tries to change marketing address
